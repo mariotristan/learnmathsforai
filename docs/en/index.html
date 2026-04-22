@@ -293,15 +293,50 @@
 
   .section.hidden { display: none; }
 
+  .lang-toggle {
+    position: absolute;
+    top: 24px;
+    right: 48px;
+    display: flex;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+  }
+
+  .lang-toggle a, .lang-toggle span {
+    padding: 5px 10px;
+    border: 1px solid var(--border);
+    text-decoration: none;
+    color: var(--muted);
+    transition: all 0.2s;
+  }
+
+  .lang-toggle a:first-child, .lang-toggle span:first-child {
+    border-radius: 2px 0 0 2px;
+  }
+
+  .lang-toggle a:last-child, .lang-toggle span:last-child {
+    border-radius: 0 2px 2px 0;
+    margin-left: -1px;
+  }
+
+  .lang-toggle a:hover { border-color: var(--accent); color: var(--accent); }
+  .lang-toggle .active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+
   @media (max-width: 700px) {
     header, .filter-bar, main { padding-left: 20px; padding-right: 20px; }
     .resources-grid { grid-template-columns: 1fr; }
+    .lang-toggle { top: 16px; right: 20px; }
   }
 </style>
 </head>
 <body>
 
 <header>
+  <div class="lang-toggle">
+    <a href="../">ES</a>
+    <span class="active">EN</span>
+  </div>
   <div class="header-tag">// Mathematical learning path for ML</div>
   <h1>Mathematics for<br><em>Machine Learning</em></h1>
   <p class="subtitle">curated resources · books · courses · papers · tools</p>
