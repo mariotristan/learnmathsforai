@@ -316,7 +316,11 @@
     font-size: 12px;
     letter-spacing: 0.1em;
     color: var(--muted);
+    transition: color 0.2s;
   }
+
+  footer a:hover span { color: var(--accent); }
+  footer a:hover img { opacity: 1; }
 
   @media (max-width: 700px) {
     footer { padding-left: 20px; padding-right: 20px; }
@@ -384,8 +388,10 @@
 <main id="main"></main>
 
 <footer>
-  <img src="https://mariotristan.github.io/quickstart/images/wiz.png" alt="wiz">
-  <span>mariotristan</span>
+  <a href="https://mariotristan.github.io/" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:12px;text-decoration:none;">
+    <img src="https://mariotristan.github.io/quickstart/images/wiz.png" alt="wiz">
+    <span>mariotristan</span>
+  </a>
 </footer>
 
 <script>
