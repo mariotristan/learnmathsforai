@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Learning Map — Mathematics for ML</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Mono:wght@300;400;500&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --surface: #13161d;
+    --border: #1e2330;
+    --accent: #c8a96e;
+    --accent2: #7eb8c9;
+    --accent3: #a87ec9;
+    --text: #e8e4dc;
+    --muted: #6b7180;
+    --tag-bg: #1a1e28;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* Noise texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  header {
+    padding: 60px 48px 40px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    z-index: 1;
+  }
+
+  .header-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 5vw, 64px);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+
+  h1 em {
+    color: var(--accent);
+    font-style: italic;
+  }
+
+  .subtitle {
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 15px;
+    font-family: 'DM Mono', monospace;
+    font-weight: 300;
+  }
+
+  .filter-bar {
+    padding: 24px 48px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .filter-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-right: 8px;
+  }
+
+  .filter-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    padding: 6px 14px;
+    border-radius: 2px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+
+  .filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .filter-btn.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+
+  main {
+    padding: 0 48px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .section {
+    margin-top: 56px;
+    animation: fadeUp 0.5s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-number {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .section-arrow {
+    color: var(--muted);
+    font-size: 13px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .section-subtitle {
+    font-size: 14px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .resources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+  }
+
+  .resource-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 20px 22px;
+    transition: all 0.25s ease;
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .resource-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--card-accent, var(--accent));
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+
+  .resource-card:hover {
+    border-color: var(--card-accent, var(--accent));
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+
+  .resource-card:hover::before { opacity: 1; }
+
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .card-title a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .card-title a:hover { color: var(--card-accent, var(--accent)); }
+
+  .type-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 2px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .type-book    { background: #2a1f0a; color: #c8a96e; border: 1px solid #3a2f1a; }
+  .type-video   { background: #0a1f2a; color: #7eb8c9; border: 1px solid #1a3040; }
+  .type-course  { background: #1a0a2a; color: #a87ec9; border: 1px solid #2a1a3a; }
+  .type-paper   { background: #0a2a1a; color: #7ec9a8; border: 1px solid #1a3a2a; }
+  .type-tool    { background: #2a0a0a; color: #c97e7e; border: 1px solid #3a1a1a; }
+  .type-article { background: #1a1f0a; color: #b0c97e; border: 1px solid #2a2f1a; }
+
+  .card-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.55;
+    margin-bottom: 12px;
+    font-style: italic;
+  }
+
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: var(--tag-bg);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 2px;
+  }
+
+  .difficulty {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+  }
+
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--border);
+  }
+  .dot.filled { background: var(--card-accent, var(--accent)); }
+
+  .free-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: #7ec9a8;
+    background: #0a2a1a;
+    border: 1px solid #1a3a2a;
+    padding: 2px 7px;
+    border-radius: 2px;
+  }
+
+  .section.hidden { display: none; }
+
+  @media (max-width: 700px) {
+    header, .filter-bar, main { padding-left: 20px; padding-right: 20px; }
+    .resources-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-tag">// Mathematical learning path for ML</div>
+  <h1>Mathematics for<br><em>Machine Learning</em></h1>
+  <p class="subtitle">curated resources · books · courses · papers · tools</p>
+</header>
+
+<div class="filter-bar">
+  <span class="filter-label">filter →</span>
+  <button class="filter-btn active" onclick="filter('all')">All</button>
+  <button class="filter-btn" onclick="filter('book')">Books</button>
+  <button class="filter-btn" onclick="filter('video')">Videos</button>
+  <button class="filter-btn" onclick="filter('course')">Courses</button>
+  <button class="filter-btn" onclick="filter('paper')">Papers</button>
+  <button class="filter-btn" onclick="filter('tool')">Tools</button>
+</div>
+
+<main id="main"></main>
+
+<script>
+const sections = [
+  {
+    id: "algebra",
+    number: "00",
+    title: "Linear Algebra",
+    subtitle: "The fundamental foundation of everything else",
+    accent: "#c8a96e",
+    resources: [
+      {
+        title: "Introduction to Linear Algebra — Gilbert Strang",
+        url: "https://math.mit.edu/~gs/linearalgebra/",
+        type: "book",
+        desc: "The classic par excellence. Strang explains with exceptional geometric intuition. The foundation of everything.",
+        tags: ["MIT", "Classic", "Geometry"],
+        difficulty: 2,
+        free: false
+      },
+      {
+        title: "Linear Algebra — MIT OpenCourseWare (18.06)",
+        url: "https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/",
+        type: "video",
+        desc: "Strang's legendary lectures on video. Free and complete. Start here.",
+        tags: ["MIT", "Video", "Complete"],
+        difficulty: 2,
+        free: true
+      },
+      {
+        title: "3Blue1Brown — Essence of Linear Algebra",
+        url: "https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab",
+        type: "video",
+        desc: "Beautiful visualizations that build deep geometric intuition. Watch before or alongside Strang.",
+        tags: ["YouTube", "Visual", "Intuition"],
+        difficulty: 1,
+        free: true
+      },
+      {
+        title: "The Matrix Cookbook",
+        url: "https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf",
+        type: "paper",
+        desc: "Compact reference of matrix identities. Indispensable to have at hand.",
+        tags: ["Reference", "Identities", "PDF"],
+        difficulty: 3,
+        free: true
+      },
+      {
+        title: "Numerical Linear Algebra — Trefethen & Bau",
+        url: "https://people.maths.ox.ac.uk/trefethen/text.html",
+        type: "book",
+        desc: "For when you need the computational perspective: SVD, QR, numerical stability.",
+        tags: ["Numerical", "SVD", "Advanced"],
+        difficulty: 3,
+        free: false
+      }
+    ]
+  },
+  {
+    id: "geometria",
+    number: "01",
+    title: "Geometry and Decomposition",
+    subtitle: "SVD, PCA, vector spaces",
+    accent: "#7eb8c9",
+    resources: [
+      {
+        title: "Mathematics for Machine Learning — Deisenroth et al.",
+        url: "https://mml-book.github.io/",
+        type: "book",
+        desc: "Free book dedicated exactly to this path. Excellent chapter on matrix decompositions.",
+        tags: ["MML", "Free", "Complete"],
+        difficulty: 2,
+        free: true
+      },
+      {
+        title: "Singular Value Decomposition (SVD) — Steve Brunton",
+        url: "https://www.youtube.com/playlist?list=PLMrJAkhIeNNSVjnsviglFoY2nXildDCcv",
+        type: "video",
+        desc: "Deep series on SVD with real applications in compression, dynamics and learning.",
+        tags: ["SVD", "Applications", "YouTube"],
+        difficulty: 2,
+        free: true
+      },
+      {
+        title: "PCA — Jake VanderPlas (Python Data Science Handbook)",
+        url: "https://jakevdp.github.io/PythonDataScienceHandbook/05.09-principal-component-analysis.html",
+        type: "article",
+        desc: "PCA explained with real Python code. Perfect for seeing the connection between theory and practice.",
+        tags: ["PCA", "Python", "Practical"],
+        difficulty: 2,
+        free: true
+      }
+    ]
+  },
+  {
+    id: "calculo",
+    number: "02",
+    title: "Calculus",
+    subtitle: "Differentiation, gradients, backprop",
+    accent: "#a87ec9",
+    resources: [
+      {
+        title: "Calculus — Michael Spivak",
+        url: "https://www.amazon.com/Calculus-4th-Michael-Spivak/dp/0914098918",
+        type: "book",
+        desc: "Real mathematical rigor. If you want to truly understand, Spivak is the choice.",
+        tags: ["Rigor", "Foundations", "Classic"],
+        difficulty: 3,
+        free: false
+      },
+      {
+        title: "3Blue1Brown — Essence of Calculus",
+        url: "https://www.youtube.com/playlist?list=PLZHQObOWTQDMsr9K-rj53DwVRMYO3t5Yr",
+        type: "video",
+        desc: "The same visual magic of 3B1B applied to calculus. Builds geometric intuition of the concept.",
+        tags: ["YouTube", "Visual", "Intuition"],
+        difficulty: 1,
+        free: true
+      },
+      {
+        title: "Matrix Calculus and Autodiff — fast.ai Part 2",
+        url: "https://course.fast.ai/",
+        type: "course",
+        desc: "Implement backpropagation from scratch. The best way to understand autodifferentiation.",
+        tags: ["Autodiff", "Backprop", "Implementation"],
+        difficulty: 3,
+        free: true
+      },
+      {
+        title: "The Matrix Calculus You Need For Deep Learning",
+        url: "https://arxiv.org/abs/1802.01528",
+        type: "paper",
+        desc: "Paper by Parr & Howard covering exactly the matrix calculus used in neural networks.",
+        tags: ["Paper", "Deep Learning", "Jacobian"],
+        difficulty: 3,
+        free: true
+      }
+    ]
+  },
+  {
+    id: "optimizacion",
+    number: "03",
+    title: "Optimization → Network Training",
+    subtitle: "Gradient descent, Adam, convexity",
+    accent: "#7ec9a8",
+    resources: [
+      {
+        title: "Convex Optimization — Boyd & Vandenberghe",
+        url: "https://web.stanford.edu/~boyd/cvxbook/",
+        type: "book",
+        desc: "The reference book on optimization. Free in PDF. Essential for understanding why gradient descent converges.",
+        tags: ["Stanford", "Convexity", "Free PDF"],
+        difficulty: 3,
+        free: true
+      },
+      {
+        title: "An Overview of Gradient Descent Optimization Algorithms",
+        url: "https://arxiv.org/abs/1609.04747",
+        type: "paper",
+        desc: "Sebastian Ruder's paper comparing SGD, Momentum, RMSProp, Adam. Required reading.",
+        tags: ["Adam", "SGD", "Comparison"],
+        difficulty: 2,
+        free: true
+      },
+      {
+        title: "Optimization for Machine Learning — Sra et al.",
+        url: "https://mitpress.mit.edu/9780262016469/optimization-for-machine-learning/",
+        type: "book",
+        desc: "Collection of papers and chapters on modern optimization for ML.",
+        tags: ["MIT Press", "Advanced", "Research"],
+        difficulty: 3,
+        free: false
+      }
+    ]
+  },
+  {
+    id: "probabilidad",
+    number: "04",
+    title: "Probability",
+    subtitle: "The foundation of statistical reasoning",
+    accent: "#c97e7e",
+    resources: [
+      {
+        title: "Probability Theory: The Logic of Science — E.T. Jaynes",
+        url: "http://www.med.mcgill.ca/epidemiology/hanley/bios601/GaussianModel/JaynesProbabilityTheory.pdf",
+        type: "book",
+        desc: "Deep Bayesian perspective. Jaynes treats probability as an extension of logic.",
+        tags: ["Bayesian", "Foundations", "PDF"],
+        difficulty: 3,
+        free: true
+      },
+      {
+        title: "Introduction to Probability — Blitzstein & Hwang",
+        url: "https://projects.iq.harvard.edu/stat110",
+        type: "course",
+        desc: "Harvard's Stat110. Videos, book and exercises. Excellent balance of rigor and intuition.",
+        tags: ["Harvard", "Stat110", "Complete"],
+        difficulty: 2,
+        free: true
+      },
+      {
+        title: "Probabilistic Theory of Pattern Recognition",
+        url: "https://link.springer.com/book/10.1007/978-1-4612-0711-5",
+        type: "book",
+        desc: "Classic that connects probability with pattern recognition and classification.",
+        tags: ["Patterns", "Classification", "Classic"],
+        difficulty: 3,
+        free: false
+      }
+    ]
+  },
+  {
+    id: "estadistica",
+    number: "05",
+    title: "Statistics and Inference",
+    subtitle: "Estimation, testing, Bayesian inference",
+    accent: "#c8a96e",
+    resources: [
+      {
+        title: "Statistical Inference — Casella & Berger",
+        url: "https://www.amazon.com/Statistical-Inference-George-Casella/dp/0534243126",
+        type: "book",
+        desc: "The reference text for rigorous mathematical statistics. Estimation, hypothesis testing.",
+        tags: ["Rigor", "Inference", "Classic"],
+        difficulty: 3,
+        free: false
+      },
+      {
+        title: "Bayesian Data Analysis — Gelman et al.",
+        url: "http://www.stat.columbia.edu/~gelman/book/",
+        type: "book",
+        desc: "The bible of Bayesian analysis. Free for students on the author's website.",
+        tags: ["Bayesian", "MCMC", "Applied"],
+        difficulty: 3,
+        free: true
+      },
+      {
+        title: "StatQuest with Josh Starmer",
+        url: "https://www.youtube.com/@statquest",
+        type: "video",
+        desc: "YouTube channel that explains statistics with exceptional clarity. Perfect for building intuition.",
+        tags: ["YouTube", "Intuition", "Accessible"],
+        difficulty: 1,
+        free: true
+      }
+    ]
+  },
+  {
+    id: "info",
+    number: "06",
+    title: "Information Theory",
+    subtitle: "Entropy, KL divergence, VAEs, LLMs",
+    accent: "#7eb8c9",
+    resources: [
+      {
+        title: "Elements of Information Theory — Cover & Thomas",
+        url: "https://www.amazon.com/Elements-Information-Theory-Telecommunications-Processing/dp/0471241954",
+        type: "book",
+        desc: "The fundamental text. Entropy, mutual information, channel capacity. Everything starts here.",
+        tags: ["Foundations", "Entropy", "Classic"],
+        difficulty: 3,
+        free: false
+      },
+      {
+        title: "Visual Information Theory — Chris Olah",
+        url: "https://colah.github.io/posts/2015-09-Visual-Information/",
+        type: "article",
+        desc: "Masterful post that builds visual intuition for entropy and KL divergence. Free, short, essential.",
+        tags: ["Visual", "KL Div", "Entropy"],
+        difficulty: 2,
+        free: true
+      },
+      {
+        title: "Understanding VAEs — Jeremy Jordan",
+        url: "https://www.jeremyjordan.me/variational-autoencoders/",
+        type: "article",
+        desc: "Connects information theory with VAEs in a clear way with code.",
+        tags: ["VAEs", "ELBO", "Code"],
+        difficulty: 2,
+        free: true
+      },
+      {
+        title: "A Mathematical Theory of Communication — Shannon (1948)",
+        url: "https://people.math.harvard.edu/~ctm/home/text/others/shannon/entropy/entropy.pdf",
+        type: "paper",
+        desc: "Shannon's original paper. Read it at least once. Founded an entire field.",
+        tags: ["Original Paper", "Shannon", "Historical"],
+        difficulty: 2,
+        free: true
+      }
+    ]
+  },
+  {
+    id: "medidas",
+    number: "07",
+    title: "Measure Theory and Processes",
+    subtitle: "Rigorous foundations of probability",
+    accent: "#a87ec9",
+    resources: [
+      {
+        title: "Real Analysis — Royden & Fitzpatrick",
+        url: "https://www.amazon.com/Real-Analysis-4th-Halsey-Royden/dp/013143747X",
+        type: "book",
+        desc: "Covers Lebesgue measure and Lp spaces. Foundation for rigorous probability.",
+        tags: ["Real Analysis", "Lebesgue", "Advanced"],
+        difficulty: 4,
+        free: false
+      },
+      {
+        title: "Probability and Stochastics — Çınlar",
+        url: "https://link.springer.com/book/10.1007/978-0-387-87859-1",
+        type: "book",
+        desc: "Probability based on measure theory. Stochastic processes from foundations.",
+        tags: ["Stochastic", "Measure", "Rigor"],
+        difficulty: 4,
+        free: false
+      },
+      {
+        title: "Brownian Motion — Mörters & Peres",
+        url: "http://www.stat.berkeley.edu/~peres/bmbook.pdf",
+        type: "book",
+        desc: "Brownian motion and its connections with modern diffusion models. Free PDF.",
+        tags: ["Diffusion", "Brownian", "PDF"],
+        difficulty: 4,
+        free: true
+      }
+    ]
+  },
+  {
+    id: "senales",
+    number: "08",
+    title: "Signal Theory",
+    subtitle: "Fourier, CNNs, audio, frequencies",
+    accent: "#b0c97e",
+    resources: [
+      {
+        title: "The Scientist and Engineer's Guide to DSP",
+        url: "https://www.dspguide.com/",
+        type: "book",
+        desc: "Introduction to signal processing with a practical focus. Completely free online.",
+        tags: ["DSP", "Fourier", "Free"],
+        difficulty: 2,
+        free: true
+      },
+      {
+        title: "3Blue1Brown — But what is the Fourier Transform?",
+        url: "https://www.youtube.com/watch?v=spUNpyF58BY",
+        type: "video",
+        desc: "The best visualization of the Fourier transform that exists. 20 minutes that change everything.",
+        tags: ["Fourier", "Visual", "Essential"],
+        difficulty: 2,
+        free: true
+      },
+      {
+        title: "Deep Learning for Audio — Valerio Velardo",
+        url: "https://www.youtube.com/playlist?list=PL-wATfeyAMNrtbkCNsLcpoAyBBRJZVlnf",
+        type: "video",
+        desc: "Complete series on audio, spectrograms and mel features for ML.",
+        tags: ["Audio", "Spectrogram", "CNN"],
+        difficulty: 2,
+        free: true
+      },
+      {
+        title: "Fourier Features for Kernel Methods",
+        url: "https://papers.nips.cc/paper_files/paper/2007/hash/013a006f03dbc5392effeb8f18fda755-Abstract.html",
+        type: "paper",
+        desc: "Random Fourier Features — connects Fourier with kernel methods and transformers.",
+        tags: ["Paper", "Kernels", "Transformers"],
+        difficulty: 3,
+        free: true
+      }
+    ]
+  },
+  {
+    id: "grafos",
+    number: "09",
+    title: "Logic and Discrete Mathematics → Graphs → GNNs",
+    subtitle: "Combinatorics, graph theory, graph neural networks",
+    accent: "#c8a96e",
+    resources: [
+      {
+        title: "Introduction to Graph Theory — Diestel",
+        url: "https://diestel-graph-theory.com/",
+        type: "book",
+        desc: "The reference text in graph theory. The electronic version is free.",
+        tags: ["Graphs", "Foundations", "PDF"],
+        difficulty: 2,
+        free: true
+      },
+      {
+        title: "CS224W — Machine Learning with Graphs (Stanford)",
+        url: "https://web.stanford.edu/class/cs224w/",
+        type: "course",
+        desc: "The best course on Graph Neural Networks. Jure Leskovec. Slides and videos available.",
+        tags: ["Stanford", "GNNs", "Complete"],
+        difficulty: 3,
+        free: true
+      },
+      {
+        title: "Semi-Supervised Classification with GCN — Kipf & Welling",
+        url: "https://arxiv.org/abs/1609.02907",
+        type: "paper",
+        desc: "The paper that popularized Graph Convolutional Networks. Entry point to GNNs.",
+        tags: ["Paper", "GCN", "Seminal"],
+        difficulty: 3,
+        free: true
+      },
+      {
+        title: "Mathematics for Computer Science — MIT 6.042",
+        url: "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/",
+        type: "course",
+        desc: "Logic, combinatorics, graph theory, discrete probability. Foundation for theoretical CS.",
+        tags: ["MIT", "Discrete", "Logic"],
+        difficulty: 2,
+        free: true
+      }
+    ]
+  },
+  {
+    id: "geometriadif",
+    number: "10",
+    title: "Differential and Topological Geometry",
+    subtitle: "Manifolds, geometric deep learning",
+    accent: "#7eb8c9",
+    resources: [
+      {
+        title: "Differential Geometry for Machine Learning — Bronstein et al.",
+        url: "https://arxiv.org/abs/2104.13478",
+        type: "paper",
+        desc: "Geometric Deep Learning: the unifying framework of CNNs, GNNs and Transformers via symmetry and geometry.",
+        tags: ["GDL", "Symmetry", "Unifying"],
+        difficulty: 4,
+        free: true
+      },
+      {
+        title: "Introduction to Smooth Manifolds — John M. Lee",
+        url: "https://link.springer.com/book/10.1007/978-1-4419-9982-5",
+        type: "book",
+        desc: "The standard text on differentiable manifolds. Necessary for rigorous differential geometry.",
+        tags: ["Manifolds", "Rigor", "Advanced"],
+        difficulty: 4,
+        free: false
+      },
+      {
+        title: "Topology Without Tears — Sidney Morris",
+        url: "http://www.topologywithouttears.net/",
+        type: "book",
+        desc: "Accessible and free introduction to topology. Good starting point before differential geometry.",
+        tags: ["Topology", "Introductory", "PDF"],
+        difficulty: 2,
+        free: true
+      },
+      {
+        title: "Geometric Deep Learning Course — Petar Veličković",
+        url: "https://geometricdeeplearning.com/",
+        type: "course",
+        desc: "The proto-book and videos from the Bronstein group. State of the art in geometric deep learning.",
+        tags: ["GDL", "Videos", "State of the Art"],
+        difficulty: 4,
+        free: true
+      }
+    ]
+  }
+];
+
+function getDots(level, accent) {
+  let html = '<div class="difficulty">';
+  for (let i = 1; i <= 4; i++) {
+    html += `<div class="dot ${i <= level ? 'filled' : ''}" style="${i <= level ? `background:${accent}` : ''}"></div>`;
+  }
+  html += '</div>';
+  return html;
+}
+
+function getTypeBadge(type) {
+  const labels = { book:'Book', video:'Video', course:'Course', paper:'Paper', tool:'Tool', article:'Article' };
+  return `<span class="type-badge type-${type}">${labels[type] || type}</span>`;
+}
+
+function render(activeFilter = 'all') {
+  const main = document.getElementById('main');
+  main.innerHTML = '';
+
+  sections.forEach((sec, si) => {
+    const filtered = activeFilter === 'all'
+      ? sec.resources
+      : sec.resources.filter(r => r.type === activeFilter);
+    if (filtered.length === 0) return;
+
+    const div = document.createElement('div');
+    div.className = 'section';
+    div.style.animationDelay = `${si * 0.05}s`;
+
+    const cards = filtered.map(r => `
+      <div class="resource-card" style="--card-accent: ${sec.accent}">
+        <div class="card-top">
+          <div class="card-title">
+            ${r.url ? `<a href="${r.url}" target="_blank" rel="noopener">${r.title}</a>` : r.title}
+          </div>
+          ${getTypeBadge(r.type)}
+        </div>
+        <div class="card-desc">${r.desc}</div>
+        <div class="card-tags">
+          ${getDots(r.difficulty, sec.accent)}
+          ${r.free ? '<span class="free-badge">FREE</span>' : ''}
+          ${r.tags.map(t => `<span class="tag">${t}</span>`).join('')}
+        </div>
+      </div>
+    `).join('');
+
+    div.innerHTML = `
+      <div class="section-header">
+        <span class="section-number" style="color:${sec.accent}">${sec.number}</span>
+        <span class="section-title">${sec.title}</span>
+        <span class="section-subtitle">— ${sec.subtitle}</span>
+      </div>
+      <div class="resources-grid">${cards}</div>
+    `;
+
+    main.appendChild(div);
+  });
+}
+
+function filter(type) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  render(type);
+}
+
+render();
+</script>
+</body>
+</html>
