@@ -447,6 +447,24 @@ const sections = [
         tags: ["Numérico", "SVD", "Avanzado"],
         difficulty: 3,
         free: false
+      },
+      {
+        title: "Immersive Linear Algebra",
+        url: "https://immersivemath.com/ila/index.html",
+        type: "book",
+        desc: "El primer libro de álgebra lineal con figuras completamente interactivas. Gratis y extraordinario para construir intuición visual.",
+        tags: ["Interactivo", "Visual", "Online"],
+        difficulty: 1,
+        free: true
+      },
+      {
+        title: "Interactive Linear Algebra — Margalit & Rabinoff (Georgia Tech)",
+        url: "https://textbooks.math.gatech.edu/ila/",
+        type: "book",
+        desc: "Libro de texto gratuito de Georgia Tech con visualizaciones interactivas de vectores, transformaciones y espacios.",
+        tags: ["Georgia Tech", "Interactivo", "Fundamentos"],
+        difficulty: 2,
+        free: true
       }
     ]
   },
@@ -528,6 +546,15 @@ const sections = [
         tags: ["Paper", "Deep Learning", "Jacobiano"],
         difficulty: 3,
         free: true
+      },
+      {
+        title: "Neural Networks: Zero to Hero — Andrej Karpathy",
+        url: "https://www.youtube.com/playlist?list=PLAqhIrjkxbuWI23v9cThsA9GvCAUhRvKZ",
+        type: "video",
+        desc: "Implementa backpropagation y un mini-GPT desde cero en Python. La forma más concreta de entender el cálculo en redes neuronales.",
+        tags: ["Karpathy", "Backprop", "Desde cero"],
+        difficulty: 2,
+        free: true
       }
     ]
   },
@@ -564,6 +591,15 @@ const sections = [
         tags: ["MIT Press", "Avanzado", "Investigación"],
         difficulty: 3,
         free: false
+      },
+      {
+        title: "Dive into Deep Learning — Optimización (d2l.ai)",
+        url: "https://d2l.ai/chapter_optimization/index.html",
+        type: "course",
+        desc: "Capítulo interactivo con código ejecutable que cubre todos los algoritmos modernos: SGD, Adam, AdamW, LR scheduling.",
+        tags: ["d2l.ai", "Interactivo", "Código"],
+        difficulty: 2,
+        free: true
       }
     ]
   },
@@ -634,6 +670,15 @@ const sections = [
         type: "video",
         desc: "Canal de YouTube que explica estadística con claridad excepcional. Perfecto para construir intuición.",
         tags: ["YouTube", "Intuición", "Accesible"],
+        difficulty: 1,
+        free: true
+      },
+      {
+        title: "Seeing Theory — Brown University",
+        url: "https://seeing-theory.brown.edu/",
+        type: "article",
+        desc: "Visualizaciones interactivas de probabilidad y estadística clásica. Hermoso, intuitivo y completamente gratuito.",
+        tags: ["Visual", "Interactivo", "Brown"],
         difficulty: 1,
         free: true
       }
@@ -851,6 +896,177 @@ const sections = [
         desc: "El proto-book y videos del grupo de Bronstein. Estado del arte en deep learning geométrico.",
         tags: ["GDL", "Videos", "Estado del arte"],
         difficulty: 4,
+        free: true
+      }
+    ]
+  },
+  {
+    id: "transformers",
+    number: "11",
+    title: "Transformers y Mecanismo de Atención",
+    subtitle: "La matemática detrás de LLMs y modelos de fundación",
+    accent: "#c97e7e",
+    resources: [
+      {
+        title: "Attention Is All You Need — Vaswani et al. (2017)",
+        url: "https://arxiv.org/abs/1706.03762",
+        type: "paper",
+        desc: "El paper original que introdujo el Transformer. Toda la arquitectura moderna de LLMs parte de aquí. Lectura obligatoria.",
+        tags: ["Paper Seminal", "Atención", "NLP"],
+        difficulty: 3,
+        free: true
+      },
+      {
+        title: "The Illustrated Transformer — Jay Alammar",
+        url: "https://jalammar.github.io/illustrated-transformer/",
+        type: "article",
+        desc: "La mejor guía visual del Transformer. Desglosa cada componente matemático con diagramas claros y animaciones.",
+        tags: ["Visual", "Atención", "Arquitectura"],
+        difficulty: 2,
+        free: true
+      },
+      {
+        title: "The Annotated Transformer — Harvard NLP",
+        url: "https://nlp.seas.harvard.edu/annotated-transformer/",
+        type: "article",
+        desc: "Implementación línea por línea del Transformer con anotaciones matemáticas. Código PyTorch ejecutable.",
+        tags: ["Código", "PyTorch", "Implementación"],
+        difficulty: 3,
+        free: true
+      },
+      {
+        title: "Let's build GPT from scratch — Andrej Karpathy",
+        url: "https://www.youtube.com/watch?v=kCc8FmEb1nY",
+        type: "video",
+        desc: "Implementa un GPT desde cero en código Python. 2 horas que enseñan más que cualquier libro teórico.",
+        tags: ["Karpathy", "GPT", "Desde cero"],
+        difficulty: 2,
+        free: true
+      },
+      {
+        title: "Rotary Position Embedding (RoPE) — Su et al.",
+        url: "https://arxiv.org/abs/2104.09864",
+        type: "paper",
+        desc: "El encoding de posición que usan LLaMA, GPT-NeoX y la mayoría de LLMs modernos. Esencial para arquitecturas actuales.",
+        tags: ["RoPE", "Posición", "LLMs"],
+        difficulty: 3,
+        free: true
+      },
+      {
+        title: "A Survey of Large Language Models — Zhao et al. (2023)",
+        url: "https://arxiv.org/abs/2303.18223",
+        type: "paper",
+        desc: "Panorama completo de la matemática y técnicas detrás de los LLMs modernos: preentrenamiento, RLHF, emergencia.",
+        tags: ["Survey", "LLMs", "2023"],
+        difficulty: 3,
+        free: true
+      }
+    ]
+  },
+  {
+    id: "difusion",
+    number: "12",
+    title: "Modelos de Difusión y Generativos",
+    subtitle: "La matemática de DDPM, Score Matching, Stable Diffusion",
+    accent: "#a87ec9",
+    resources: [
+      {
+        title: "Denoising Diffusion Probabilistic Models — Ho et al. (2020)",
+        url: "https://arxiv.org/abs/2006.11239",
+        type: "paper",
+        desc: "El paper que popularizó los modelos de difusión. Conecta ecuaciones de calor, cadenas de Markov y redes neuronales.",
+        tags: ["DDPM", "Paper Seminal", "2020"],
+        difficulty: 3,
+        free: true
+      },
+      {
+        title: "What are Diffusion Models? — Lilian Weng",
+        url: "https://lilianweng.github.io/posts/2021-07-11-diffusion-models/",
+        type: "article",
+        desc: "La explicación más completa y accesible de los modelos de difusión. Incluye la derivación matemática detallada.",
+        tags: ["Blog", "ELBO", "Score Matching"],
+        difficulty: 3,
+        free: true
+      },
+      {
+        title: "Score-Based Generative Modeling through SDEs — Yang Song",
+        url: "https://arxiv.org/abs/2011.13456",
+        type: "paper",
+        desc: "La perspectiva de score matching y ecuaciones diferenciales estocásticas. Unifica DDPM y los modelos de puntuación.",
+        tags: ["SDE", "Score Matching", "Unificado"],
+        difficulty: 4,
+        free: true
+      },
+      {
+        title: "Understanding Diffusion Models: A Unified Perspective — Calvin Luo",
+        url: "https://arxiv.org/abs/2208.11970",
+        type: "paper",
+        desc: "Derivación unificada desde VAEs hasta DDPM. Excelente para entender la cadena matemática completa.",
+        tags: ["Tutorial", "VAE", "DDPM"],
+        difficulty: 3,
+        free: true
+      },
+      {
+        title: "Diffusion Models from Scratch — Hugging Face",
+        url: "https://huggingface.co/blog/annotated-diffusion",
+        type: "article",
+        desc: "Implementación anotada de DDPM en PyTorch con explicaciones paso a paso. Práctico y gratuito.",
+        tags: ["HuggingFace", "PyTorch", "Código"],
+        difficulty: 3,
+        free: true
+      }
+    ]
+  },
+  {
+    id: "rl",
+    number: "13",
+    title: "Aprendizaje por Refuerzo",
+    subtitle: "MDPs, Policy Gradient, la matemática de RLHF",
+    accent: "#7ec9a8",
+    resources: [
+      {
+        title: "Reinforcement Learning: An Introduction — Sutton & Barto",
+        url: "http://incompleteideas.net/book/the-book-2nd.html",
+        type: "book",
+        desc: "El libro de referencia en RL. Segunda edición disponible gratis en PDF. MDPs, Q-learning, policy gradient.",
+        tags: ["Clásico", "MDPs", "PDF gratis"],
+        difficulty: 2,
+        free: true
+      },
+      {
+        title: "Spinning Up in Deep RL — OpenAI",
+        url: "https://spinningup.openai.com/",
+        type: "course",
+        desc: "Recurso educativo para Deep RL con código, explicaciones matemáticas y algoritmos implementados. Completamente gratis.",
+        tags: ["OpenAI", "Código", "Algoritmos"],
+        difficulty: 3,
+        free: true
+      },
+      {
+        title: "David Silver — RL Course (UCL/DeepMind)",
+        url: "https://www.youtube.com/playlist?list=PLqYmG7hTraZDM-OYHWgPebj2MfCFzFObQ",
+        type: "video",
+        desc: "El curso de referencia en RL. 10 conferencias que cubren toda la teoría, desde ecuaciones de Bellman hasta AlphaGo.",
+        tags: ["DeepMind", "Bellman", "Completo"],
+        difficulty: 3,
+        free: true
+      },
+      {
+        title: "Proximal Policy Optimization — Schulman et al. (2017)",
+        url: "https://arxiv.org/abs/1707.06347",
+        type: "paper",
+        desc: "PPO: el algoritmo que se usa en RLHF para alinear LLMs. La matemática detrás de ChatGPT y la IA moderna.",
+        tags: ["PPO", "RLHF", "LLMs"],
+        difficulty: 3,
+        free: true
+      },
+      {
+        title: "OpenAI Gym / Gymnasium — Farama Foundation",
+        url: "https://gymnasium.farama.org/",
+        type: "tool",
+        desc: "El entorno estándar para experimentar con algoritmos de RL. Gratis, mantenido activamente y bien documentado.",
+        tags: ["Herramienta", "Entornos", "Práctica"],
+        difficulty: 1,
         free: true
       }
     ]
